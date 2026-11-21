@@ -62,6 +62,8 @@ public class jugador {
         this.ficha = ficha;
     }
 
+   
+
     // Registrar victoria
     public void registrarVictoria() {
 
