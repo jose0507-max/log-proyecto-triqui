@@ -12,12 +12,14 @@ public class partida {
         this.modalidad = modalidad;
         this.turno = 0;
         this.tablero = new tablero();
+        this.ganador = null;
 
         this.jugadores = new jugador[2];
         this.jugadores[0] = jugador1;
         this.jugadores[1] = jugador2;
     }
 
+    // Elegir aleatoriamente quien comienza
     public int elegirInicial() {
 
         int numero = (int) (Math.random() * 2);
@@ -27,16 +29,39 @@ public class partida {
         return numero;
     }
 
+    // Realizar una jugada
     public boolean realizarJugada(int i, int j) {
 
         return tablero.colocar_ficha(i, j, jugadores[turno].getFicha());
     }
 
+    // Cambiar el turno
     public void cambiarTurno() {
 
         turno = (turno + 1) % 2;
     }
 
+    // Obtener el jugador actual
+    public jugador getJugadorActual() {
+
+        return jugadores[turno];
+    }
+
+    // Mostrar el tablero
+    public void mostrarTablero() {
+
+        tablero.mostrar_tablero();
+    }
+
+    // Comprobar si la partida termino
+    public boolean estaTerminada() {
+
+        return tablero.esta_lleno() ||
+               tablero.hay_ganador(jugadores[0].getFicha()) ||
+               tablero.hay_ganador(jugadores[1].getFicha());
+    }
+
+    // Registrar el resultado de la partida
     public void finalizarPartida() {
 
         if (tablero.hay_ganador(jugadores[turno].getFicha())) {
@@ -53,21 +78,9 @@ public class partida {
         }
     }
 
-    public void jugar() {
+    // Obtener el ganador
+    public jugador getGanador() {
 
-        elegirInicial();
-
-        while (!tablero.esta_lleno() &&
-               !tablero.hay_ganador(jugadores[0].getFicha()) &&
-               !tablero.hay_ganador(jugadores[1].getFicha())) {
-
-            // Pendiente: recibir coordenadas desde Inicio.
-
-            if (realizarJugada(i, j)) {
-                cambiarTurno();
-            }
-        }
-
-        finalizarPartida();
+        return ganador;
     }
 }

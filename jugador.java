@@ -1,3 +1,4 @@
+
 public class jugador {
 
     private int codigo;
@@ -62,8 +63,6 @@ public class jugador {
         this.ficha = ficha;
     }
 
-   
-
     // Registrar victoria
     public void registrarVictoria() {
 
@@ -93,13 +92,12 @@ public class jugador {
     // Mostrar información
     public void mostrarInformacion() {
 
-        System.out.println("Código: " + codigo);
+        System.out.println("Codigo: " + codigo);
         System.out.println("Nombre: " + nombre);
-        System.out.println("Ficha: " + ficha);
         System.out.println("Puntos: " + puntos);
         System.out.println("Victorias: " + victorias);
         System.out.println("Derrotas: " + derrotas);
         System.out.println("Empates: " + empates);
-        System.out.println("Partidas Jugadas: " + partidasJugadas());
+        System.out.println("Partidas jugadas: " + partidasJugadas());
     }
 }
