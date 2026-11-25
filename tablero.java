@@ -18,23 +18,36 @@ public class tablero {
 
     public void mostrar_tablero() {
 
+        System.out.println();
+        System.out.println("=================================");
+        System.out.println("              TRIQUI");
+        System.out.println("=================================");
+        System.out.println();
+        System.out.println("             1       2       3");
+        System.out.println("         +-------+-------+-------+");
+
         for (int i = 0; i < 3; i++) {
+
+            System.out.print("      " + (i + 1) + "  ");
 
             for (int j = 0; j < 3; j++) {
 
-                System.out.print(" " + casillas[i][j].getficha() + " ");
+                char ficha = casillas[i][j].getficha();
 
-                if (j < 2) {
-                    System.out.print("|");
+                System.out.print("|");
+
+                if (ficha == ' ') {
+                    System.out.print("       ");
+                } else {
+                    System.out.print("   " + ficha + "   ");
                 }
             }
 
-            System.out.println();
-
-            if (i < 2) {
-                System.out.println("-----------");
-            }
+            System.out.println("|");
+            System.out.println("         +-------+-------+-------+");
         }
+
+        System.out.println();
     }
 
     public boolean posicion_valida(int i, int j) {
