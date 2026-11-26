@@ -1,4 +1,3 @@
-
 public class partida {
 
     private tablero tablero;
@@ -32,7 +31,9 @@ public class partida {
     // Realizar una jugada
     public boolean realizarJugada(int i, int j) {
 
-        boolean realizada = tablero.colocar_ficha(i, j, jugadores[turno].getFicha());
+        boolean realizada = tablero.colocar_ficha(
+            i, j, jugadores[turno].getFicha()
+        );
 
         if (realizada) {
 
@@ -42,6 +43,26 @@ public class partida {
         }
 
         return realizada;
+    }
+
+    // Ejecutar el turno de la maquina
+    public boolean jugarMaquina() {
+
+        if (modalidad != 2 || turno != 1) {
+            return false;
+        }
+
+        maquina computadora = (maquina) jugadores[turno];
+
+        char fichaRival = jugadores[0].getFicha();
+
+        int[] jugada = computadora.elegirJugada(tablero, fichaRival);
+
+        if (jugada == null) {
+            return false;
+        }
+
+        return realizarJugada(jugada[0], jugada[1]);
     }
 
     // Cambiar el turno

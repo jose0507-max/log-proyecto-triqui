@@ -55,6 +55,16 @@ public class tablero {
         return (i >= 0 && i < 3 && j >= 0 && j < 3);
     }
 
+    // Obtener la ficha de una posicion
+    public char obtener_ficha(int i, int j) {
+
+        if (posicion_valida(i, j)) {
+            return casillas[i][j].getficha();
+        }
+
+        return ' ';
+    }
+
     public boolean colocar_ficha(int i, int j, char ficha) {
 
         if (posicion_valida(i, j) && casillas[i][j].esta_vacia()) {
@@ -97,7 +107,7 @@ public class tablero {
             }
         }
 
-        // Comprobar columnas
+    // Comprobar columnas
         for (int i = 0; i < 3; i++) {
 
             if (casillas[0][i].getficha() == ficha &&

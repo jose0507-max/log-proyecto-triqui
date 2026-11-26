@@ -1,9 +1,16 @@
+
 public class maquina extends jugador {
-    private  int movimientos;
+
+    private int movimientos;
 
     public maquina(int codigo, String nombre, char ficha) {
         super(codigo, nombre, ficha);
         movimientos = 0;
+    }
+
+    // Registrar un movimiento realizado por la maquina
+    public void registrarMovimiento() {
+        movimientos++;
     }
 
     public int[] hallarGanadora(tablero tablero) {
@@ -171,6 +178,77 @@ public class maquina extends jugador {
                     }
                 }
             }
+        }
+
+        return null;
+    }
+
+    // Elegir la jugada de la maquina
+    public int[] elegirJugada(tablero tablero, char fichaRival) {
+
+        int[] jugada;
+
+        // 1. Buscar una jugada ganadora
+        jugada = hallarGanadora(tablero);
+
+        if (jugada != null) {
+            return jugada;
+        }
+
+        // 2. Bloquear al rival
+        jugada = hallarBloqueo(tablero, fichaRival);
+
+        if (jugada != null) {
+            return jugada;
+        }
+
+        // 3. Buscar bifurcacion desde el segundo movimiento
+        if (movimientos >= 1) {
+
+            jugada = hallarBifurcacion(tablero);
+
+            if (jugada != null) {
+                return jugada;
+            }
+        }
+
+        // 4. Buscar el centro
+        if (tablero.obtener_ficha(1, 1) == ' ') {
+            return new int[]{1, 1};
+        }
+
+        // 5. Buscar una esquina
+        if (tablero.obtener_ficha(0, 0) == ' ') {
+            return new int[]{0, 0};
+        }
+
+        if (tablero.obtener_ficha(0, 2) == ' ') {
+            return new int[]{0, 2};
+        }
+
+        if (tablero.obtener_ficha(2, 0) == ' ') {
+            return new int[]{2, 0};
+        }
+
+        if (tablero.obtener_ficha(2, 2) == ' ') {
+            return new int[]{2, 2};
+        }
+
+        // 6. Buscar un borde
+        if (tablero.obtener_ficha(0, 1) == ' ') {
+            return new int[]{0, 1};
+        }
+
+        if (tablero.obtener_ficha(1, 0) == ' ') {
+            return new int[]{1, 0};
+        }
+
+        if (tablero.obtener_ficha(1, 2) == ' ') {
+            return new int[]{1, 2};
+        }
+
+        if (tablero.obtener_ficha(2, 1) == ' ') {
+            return new int[]{2, 1};
         }
 
         return null;
