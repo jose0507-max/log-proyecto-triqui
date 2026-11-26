@@ -32,7 +32,16 @@ public class partida {
     // Realizar una jugada
     public boolean realizarJugada(int i, int j) {
 
-        return tablero.colocar_ficha(i, j, jugadores[turno].getFicha());
+        boolean realizada = tablero.colocar_ficha(i, j, jugadores[turno].getFicha());
+
+        if (realizada) {
+
+            if (modalidad == 2 && turno == 1) {
+                ((maquina) jugadores[turno]).registrarMovimiento();
+            }
+        }
+
+        return realizada;
     }
 
     // Cambiar el turno

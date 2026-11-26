@@ -63,6 +63,10 @@ public class gestorjugadores {
         return cantidad == MAX_JUGADORES;
     }
 
+    public int cantidadJugadores(){
+        return cantidad;
+    }
+
     // Comprobar si el arreglo esta vacio
     public boolean estaVacio() {
 

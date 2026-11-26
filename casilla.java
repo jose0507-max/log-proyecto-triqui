@@ -18,7 +18,5 @@ public class casilla {
         return ficha == ' ';
     }
 
-    public void liberar() {
-        ficha = ' ';
-    }
+
 }

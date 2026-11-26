@@ -175,135 +175,140 @@ public class inicio {
 
         if (modalidad == 1) {
 
-            // Seleccionar primer jugador
-            System.out.println("Selecciona el primer jugador.");
-            gestor.mostrarJugadores();
+            if (gestor.cantidadJugadores() < 2) {
+                System.out.print(" Deben haber más de 2 jugadores registrados ");
+            }else{
+                
+                
+                // Seleccionar primer jugador
+                System.out.println("Selecciona el primer jugador.");
+                gestor.mostrarJugadores();
 
-            int codigo1 = leerEntero("Codigo del primer jugador: ");
-            jugador jugador1 = gestor.buscar(codigo1);
+                int codigo1 = leerEntero("Codigo del primer jugador: ");
+                jugador jugador1 = gestor.buscar(codigo1);
 
-            if (jugador1 == null) {
-                System.out.println("No existe un jugador con ese codigo.");
-                return;
-            }
-
-            // Seleccionar segundo jugador
-            System.out.println("Selecciona el segundo jugador.");
-
-            int codigo2 = leerEntero("Codigo del segundo jugador: ");
-
-            if (codigo1 == codigo2) {
-                System.out.println("No puedes seleccionar el mismo jugador dos veces.");
-                return;
-            }
-
-            jugador jugador2 = gestor.buscar(codigo2);
-
-            if (jugador2 == null) {
-                System.out.println("No existe un jugador con ese codigo.");
-                return;
-            }
-
-            // Elegir ficha del primer jugador
-            char ficha1 = ' ';
-            char ficha2 = ' ';
-            boolean valida = false;
-
-            while (!valida) {
-
-                System.out.print("Ficha para " + jugador1.getNombre() + " (X/O): ");
-                String entrada = teclado.nextLine().trim();
-
-                if (entrada.length() == 1 &&
-                    (entrada.charAt(0) == 'X' || entrada.charAt(0) == 'O' ||
-                     entrada.charAt(0) == 'x' || entrada.charAt(0) == 'o')) {
-
-                    ficha1 = entrada.charAt(0);
-
-                    if (ficha1 == 'x') {
-                        ficha1 = 'X';
-                    } else if (ficha1 == 'o') {
-                        ficha1 = 'O';
-                    }
-
-                    valida = true;
-
-                } else {
-                    System.out.println("Error: selecciona X u O.");
+                if (jugador1 == null) {
+                    System.out.println("No existe un jugador con ese codigo.");
+                    return;
                 }
-            }
 
-            // Asignar la ficha contraria al segundo jugador
-            if (ficha1 == 'X') {
-                ficha2 = 'O';
-            } else {
-                ficha2 = 'X';
-            }
+                // Seleccionar segundo jugador
+                System.out.println("Selecciona el segundo jugador.");
 
-            // Asignar fichas para esta partida
-            jugador1.setFicha(ficha1);
-            jugador2.setFicha(ficha2);
+                int codigo2 = leerEntero("Codigo del segundo jugador: ");
 
-            System.out.println(jugador1.getNombre() + ": " + ficha1);
-            System.out.println(jugador2.getNombre() + ": " + ficha2);
+                if (codigo1 == codigo2) {
+                    System.out.println("No puedes seleccionar el mismo jugador dos veces.");
+                    return;
+                }
 
-            // Crear partida
-            partida nuevaPartida = new partida(modalidad, jugador1, jugador2);
+                jugador jugador2 = gestor.buscar(codigo2);
 
-            System.out.println("Partida creada correctamente.");
+                if (jugador2 == null) {
+                    System.out.println("No existe un jugador con ese codigo.");
+                    return;
+                }
 
-            // Elegir quien comienza
-            nuevaPartida.elegirInicial();
+                // Elegir ficha del primer jugador
+                char ficha1 = ' ';
+                char ficha2 = ' ';
+                boolean valida = false;
 
-            System.out.println("Comienza: " +
-                nuevaPartida.getJugadorActual().getNombre());
+                while (!valida) {
 
-            // Desarrollo de la partida
-            while (!nuevaPartida.estaTerminada()) {
+                    System.out.print("Ficha para " + jugador1.getNombre() + " (X/O): ");
+                    String entrada = teclado.nextLine().trim();
 
-                nuevaPartida.mostrarTablero();
+                    if (entrada.length() == 1 &&
+                        (entrada.charAt(0) == 'X' || entrada.charAt(0) == 'O' ||
+                        entrada.charAt(0) == 'x' || entrada.charAt(0) == 'o')) {
 
-                jugador actual = nuevaPartida.getJugadorActual();
+                        ficha1 = entrada.charAt(0);
 
-                System.out.println("Turno de: " + actual.getNombre());
-                System.out.println("Ficha: " + actual.getFicha());
+                        if (ficha1 == 'x') {
+                            ficha1 = 'X';
+                        } else if (ficha1 == 'o') {
+                            ficha1 = 'O';
+                        }
 
-                // Solicitar coordenadas
-                int fila = leerEntero("Ingresa la fila (1-3): ");
-                int columna = leerEntero("Ingresa la columna (1-3): ");
+                        valida = true;
 
-                // Intentar realizar la jugada
-                if (nuevaPartida.realizarJugada(fila - 1, columna - 1)) {
+                    } else {
+                        System.out.println("Error: selecciona X u O.");
+                    }
+                }
 
-                    if (nuevaPartida.estaTerminada()) {
+                // Asignar la ficha contraria al segundo jugador
+                if (ficha1 == 'X') {
+                    ficha2 = 'O';
+                } else {
+                    ficha2 = 'X';
+                }
 
-                        nuevaPartida.finalizarPartida();
+                // Asignar fichas para esta partida
+                jugador1.setFicha(ficha1);
+                jugador2.setFicha(ficha2);
+
+                System.out.println(jugador1.getNombre() + ": " + ficha1);
+                System.out.println(jugador2.getNombre() + ": " + ficha2);
+
+                // Crear partida
+                partida nuevaPartida = new partida(modalidad, jugador1, jugador2);
+
+                System.out.println("Partida creada correctamente.");
+
+                // Elegir quien comienza
+                nuevaPartida.elegirInicial();
+
+                System.out.println("Comienza: " +
+                    nuevaPartida.getJugadorActual().getNombre());
+
+                // Desarrollo de la partida
+                while (!nuevaPartida.estaTerminada()) {
+
+                    nuevaPartida.mostrarTablero();
+
+                    jugador actual = nuevaPartida.getJugadorActual();
+
+                    System.out.println("Turno de: " + actual.getNombre());
+                    System.out.println("Ficha: " + actual.getFicha());
+
+                    // Solicitar coordenadas
+                    int fila = leerEntero("Ingresa la fila (1-3): ");
+                    int columna = leerEntero("Ingresa la columna (1-3): ");
+
+                    // Intentar realizar la jugada
+                    if (nuevaPartida.realizarJugada(fila - 1, columna - 1)) {
+
+                        if (nuevaPartida.estaTerminada()) {
+
+                            nuevaPartida.finalizarPartida();
+
+                        } else {
+
+                            nuevaPartida.cambiarTurno();
+                        }
 
                     } else {
 
-                        nuevaPartida.cambiarTurno();
+                        System.out.println("Posicion invalida u ocupada. Intenta nuevamente.");
                     }
+                }
+
+                // Mostrar resultado final
+                nuevaPartida.mostrarTablero();
+
+                if (nuevaPartida.getGanador() != null) {
+
+                    System.out.println("¡Tenemos un ganador!");
+                    System.out.println("Ganador: " +
+                        nuevaPartida.getGanador().getNombre());
 
                 } else {
 
-                    System.out.println("Posicion invalida u ocupada. Intenta nuevamente.");
+                    System.out.println("La partida termino en empate.");
                 }
-            }
-
-            // Mostrar resultado final
-            nuevaPartida.mostrarTablero();
-
-            if (nuevaPartida.getGanador() != null) {
-
-                System.out.println("¡Tenemos un ganador!");
-                System.out.println("Ganador: " +
-                    nuevaPartida.getGanador().getNombre());
-
-            } else {
-
-                System.out.println("La partida termino en empate.");
-            }
-
+            }    
         } else if (modalidad == 2) {
 
             System.out.println("La modalidad contra la maquina esta pendiente.");
