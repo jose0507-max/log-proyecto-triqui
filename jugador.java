@@ -1,16 +1,22 @@
 
-public class jugador {
+// Guarda los datos y estadisticas de una persona que participa en el juego.
+public class Jugador {
 
+    // Codigo unico que permite identificar al jugador.
     private int codigo;
+    // Nombre que se muestra durante el juego y en el reporte.
     private String nombre;
+    // Ficha asignada para la partida: X u O.
     private char ficha;
+    // Puntaje acumulado: victoria suma 2, empate suma 1 y derrota suma 0.
     private int puntos;
     private int victorias;
     private int derrotas;
     private int empates;
 
+    // Constructor: recibe los datos iniciales y deja las estadisticas en cero.
     // Constructor
-    public jugador(int codigo, String nombre, char ficha) {
+    public Jugador(int codigo, String nombre, char ficha) {
 
         this.codigo = codigo;
         this.nombre = nombre;
@@ -21,6 +27,7 @@ public class jugador {
         this.empates = 0;
     }
 
+    // Getters: permiten consultar los atributos sin acceder directamente a ellos.
     // Getters
     public int getCodigo() {
         return codigo;
@@ -50,6 +57,7 @@ public class jugador {
         return empates;
     }
 
+    // Setters: permiten actualizar los atributos que pueden cambiar.
     // Setters
     public void setCodigo(int codigo) {
         this.codigo = codigo;
@@ -63,19 +71,22 @@ public class jugador {
         this.ficha = ficha;
     }
 
+    // Registra una victoria y agrega 2 puntos al jugador.
     // Registrar victoria
     public void registrarVictoria() {
 
         victorias++;
-        puntos += 3;
+        puntos += 2;
     }
 
+    // Registra una derrota; no modifica el puntaje.
     // Registrar derrota
     public void registrarDerrota() {
 
         derrotas++;
     }
 
+    // Registra un empate y agrega 1 punto.
     // Registrar empate
     public void registrarEmpate() {
 
@@ -83,12 +94,14 @@ public class jugador {
         puntos += 1;
     }
 
+    // Suma victorias, derrotas y empates para saber cuantas partidas ha jugado.
     // Calcular partidas jugadas
     public int partidasJugadas() {
 
         return victorias + derrotas + empates;
     }
 
+    // Imprime los datos y estadisticas del jugador en consola.
     // Mostrar información
     public void mostrarInformacion() {
 

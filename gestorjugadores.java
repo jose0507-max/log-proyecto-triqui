@@ -1,19 +1,25 @@
 
-public class gestorjugadores {
+// Administra el arreglo de jugadores: registra, busca, muestra y genera la clasificacion.
+public class GestorJugadores {
 
-    private jugador[] jugadores;
+    // Arreglo donde se guardan los jugadores registrados.
+    private Jugador[] jugadores;
+    // Indica cuantas posiciones del arreglo ya estan ocupadas.
     private int cantidad;
+    // Limite de jugadores que puede almacenar el arreglo.
     private final int MAX_JUGADORES = 100;
 
+    // Constructor: crea el arreglo y comienza con cero jugadores.
     // Constructor
-    public gestorjugadores() {
+    public GestorJugadores() {
 
-        jugadores = new jugador[MAX_JUGADORES];
+        jugadores = new Jugador[MAX_JUGADORES];
         cantidad = 0;
     }
 
-    // Registrar un jugador
-    public boolean registrar(jugador j) {
+    // Agrega el jugador al final del arreglo si hay espacio y su codigo no se repite.
+    // Registrar un Jugador
+    public boolean registrar(Jugador j) {
 
         if (estaLleno()) {
             System.out.println("No hay espacio para registrar mas jugadores.");
@@ -21,7 +27,7 @@ public class gestorjugadores {
         }
 
         if (existeCodigo(j.getCodigo())) {
-            System.out.println("Ya existe un jugador con ese codigo.");
+            System.out.println("Ya existe un Jugador con ese codigo.");
             return false;
         }
 
@@ -31,6 +37,7 @@ public class gestorjugadores {
         return true;
     }
 
+    // Recorre los jugadores registrados buscando el codigo indicado.
     // Comprobar si existe un codigo
     public boolean existeCodigo(int codigo) {
 
@@ -44,8 +51,9 @@ public class gestorjugadores {
         return false;
     }
 
-    // Buscar un jugador por su codigo
-    public jugador buscar(int codigo) {
+    // Devuelve el objeto jugador si lo encuentra; si no, devuelve null.
+    // Buscar un Jugador por su codigo
+    public Jugador buscar(int codigo) {
 
         for (int i = 0; i < cantidad; i++) {
 
@@ -57,22 +65,26 @@ public class gestorjugadores {
         return null;
     }
 
+    // Compara la cantidad actual con el limite maximo.
     // Comprobar si el arreglo esta lleno
     public boolean estaLleno() {
 
         return cantidad == MAX_JUGADORES;
     }
 
+    // Devuelve la cantidad de jugadores registrados, no el tamaño total del arreglo.
     public int cantidadJugadores(){
         return cantidad;
     }
 
+    // Indica si todavia no se ha registrado ningun jugador.
     // Comprobar si el arreglo esta vacio
     public boolean estaVacio() {
 
         return cantidad == 0;
     }
 
+    // Muestra los datos de cada jugador registrado.
     // Mostrar todos los jugadores
     public void mostrarJugadores() {
 
@@ -91,16 +103,19 @@ public class gestorjugadores {
         }
     }
 
+    // Copia solo los jugadores registrados para poder ordenarlos sin alterar el arreglo original.
     // Crear una copia ordenada por puntos
-    public jugador[] copiarOrdenada() {
+    public Jugador[] copiarOrdenada() {
 
-        jugador[] copia = new jugador[cantidad];
+        Jugador[] copia = new Jugador[cantidad];
 
+        // Copiar referencias de jugadores a un arreglo nuevo.
         // Copiar los jugadores
         for (int i = 0; i < cantidad; i++) {
             copia[i] = jugadores[i];
         }
 
+        // Ordenamiento burbuja: compara vecinos y los intercambia si estan en orden incorrecto.
         // Ordenar la copia de mayor a menor puntaje
         for (int i = 0; i < cantidad - 1; i++) {
 
@@ -108,7 +123,7 @@ public class gestorjugadores {
 
                 if (copia[j].getPuntos() < copia[j + 1].getPuntos()) {
 
-                    jugador auxiliar = copia[j];
+                    Jugador auxiliar = copia[j];
                     copia[j] = copia[j + 1];
                     copia[j + 1] = auxiliar;
                 }
@@ -118,6 +133,7 @@ public class gestorjugadores {
         return copia;
     }
 
+    // Muestra la tabla de posiciones usando la copia ordenada.
     // Mostrar clasificacion y reporte
     public void mostrarReporte() {
 
@@ -126,7 +142,7 @@ public class gestorjugadores {
             return;
         }
 
-        jugador[] ordenados = copiarOrdenada();
+        Jugador[] ordenados = copiarOrdenada();
 
         System.out.println("=============== CLASIFICACION ===============");
         System.out.println("POS | CODIGO | NOMBRE | PUNTOS | V | D | E");

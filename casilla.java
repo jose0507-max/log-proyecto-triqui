@@ -1,20 +1,26 @@
-public class casilla {
+// Representa una sola casilla del tablero. Cada casilla guarda X, O o espacio si esta vacia.
+public class Casilla {
 
+    // La ficha que ocupa esta casilla. El espacio (' ') significa que esta libre.
     private char ficha;
 
-    public casilla() {
+    // Al crear una casilla, comienza vacia.
+    public Casilla() {
         this.ficha = ' ';
     }
 
-    public char getficha() {
+    // Devuelve la ficha que esta guardada en la casilla.
+    public char getFicha() {
         return ficha;
     }
 
-    public void setficha(char ficha) {
+    // Cambia la ficha almacenada (por ejemplo, cuando un jugador hace su movimiento).
+    public void setFicha(char ficha) {
         this.ficha = ficha;
     }
 
-    public boolean esta_vacia() {
+    // Devuelve true si no hay X ni O en esta casilla.
+    public boolean estaVacia() {
         return ficha == ' ';
     }
 

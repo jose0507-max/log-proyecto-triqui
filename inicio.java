@@ -1,15 +1,20 @@
 import java.util.Scanner;
 
-public class inicio {
+// Clase principal: muestra menus, solicita datos y conecta las demas clases.
+public class Inicio {
 
-    private gestorjugadores gestor;
+    // Objeto que mantiene el registro de jugadores durante la ejecucion.
+    private GestorJugadores gestor;
+    // Permite leer lo que el usuario escribe en la consola.
     private Scanner teclado;
 
-    public inicio() {
-        gestor = new gestorjugadores();
+    // Constructor: crea el gestor y el lector de teclado.
+    public Inicio() {
+        gestor = new GestorJugadores();
         teclado = new Scanner(System.in);
     }
 
+    // Lee texto y lo convierte a entero; si no es numerico, vuelve a preguntar.
     // Leer un numero entero
     public int leerEntero(String mensaje) {
         int numero = 0;
@@ -19,17 +24,26 @@ public class inicio {
             System.out.print(mensaje);
             String entrada = teclado.nextLine();
 
-            try {
-                numero = Integer.parseInt(entrada);
-                valido = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Error: debes ingresar un numero entero.");
+            // Primero comprobamos si el usuario escribio algun espacio.
+            // No usamos trim(), porque queremos rechazar los espacios, no eliminarlos.
+            if (entrada.contains(" ")) {
+                System.out.println("Error: no se aceptan espacios. Ingresa un numero entero.");
+            } else {
+                // parseInt convierte el texto a entero.
+                try {
+                    numero = Integer.parseInt(entrada);
+                    valido = true;
+                // Si escribe letras, decimales u otro valor no entero, se vuelve a pedir.
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: debes ingresar un numero entero valido.");
+                }
             }
         }
 
         return numero;
     }
 
+    // Lee un nombre, elimina espacios al inicio/final y evita nombres vacios o con numeros.
     // Leer un nombre
     public String leerNombre(String mensaje) {
         String nombre;
@@ -40,6 +54,7 @@ public class inicio {
             nombre = teclado.nextLine().trim();
             valido = nombre.length() > 0;
 
+            // Revisa cada caracter del nombre para detectar digitos.
             for (int i = 0; i < nombre.length(); i++) {
                 if (nombre.charAt(i) >= '0' &&
                     nombre.charAt(i) <= '9') {
@@ -56,6 +71,7 @@ public class inicio {
         return nombre;
     }
 
+    // Muestra el mensaje de bienvenida al iniciar el programa.
     public void mostrarPortada() {
         System.out.println("=================================");
         System.out.println("          JUEGO DE TRIQUI        ");
@@ -64,16 +80,18 @@ public class inicio {
         System.out.println();
     }
 
+    // Imprime las opciones disponibles en el menu principal.
     public void mostrarMenu() {
         System.out.println("========== MENU PRINCIPAL ==========");
-        System.out.println("1. Registrar jugador");
+        System.out.println("1. Registrar Jugador");
         System.out.println("2. Mostrar jugadores");
-        System.out.println("3. Iniciar partida");
+        System.out.println("3. Iniciar Partida");
         System.out.println("4. Ver reporte");
         System.out.println("5. Salir");
         System.out.println("====================================");
     }
 
+    // Mantiene el menu activo hasta que el usuario elige salir (opcion 5).
     public void ejecutarPrograma() {
         int opcion;
 
@@ -83,6 +101,7 @@ public class inicio {
             mostrarMenu();
             opcion = leerEntero("Selecciona una opcion: ");
 
+            // Ejecuta la accion que corresponde a la opcion elegida.
             switch (opcion) {
                 case 1:
                     registrarJugadores();
@@ -117,28 +136,35 @@ public class inicio {
         } while (opcion != 5);
     }
 
+    // Solicita codigo y nombre, valida los datos y registra el nuevo jugador.
     public void registrarJugadores() {
         if (gestor.estaLleno()) {
             System.out.println("No es posible registrar mas jugadores.");
             return;
         }
 
-        int codigo = leerEntero("Codigo del jugador: ");
+        int codigo = leerEntero("Codigo del Jugador: ");
+
+        while (codigo <= 0) {
+            System.out.println("Error: el codigo debe ser un numero positivo.");
+            codigo = leerEntero("Codigo del Jugador: ");
+        }
 
         if (gestor.existeCodigo(codigo)) {
             System.out.println("Error: ese codigo ya esta registrado.");
             return;
         }
 
-        String nombre = leerNombre("Nombre del jugador: ");
+        String nombre = leerNombre("Nombre del Jugador: ");
 
-        jugador nuevoJugador = new jugador(codigo, nombre, ' ');
+        Jugador nuevoJugador = new Jugador(codigo, nombre, ' ');
 
         if (gestor.registrar(nuevoJugador)) {
             System.out.println("Jugador registrado correctamente.");
         }
     }
 
+    // Organiza la seleccion de participantes, fichas y el ciclo completo de juego.
     public void iniciarPartida() {
 
         if (gestor.estaVacio()) {
@@ -150,54 +176,59 @@ public class inicio {
         System.out.println("1. Jugador vs Jugador");
         System.out.println("2. Jugador vs Maquina");
 
-        int modalidad = leerEntero("Selecciona la modalidad: ");
+        int modalidad = leerEntero("Selecciona la modalidad (1 o 2): ");
 
-        if (modalidad != 1 && modalidad != 2) {
-            System.out.println("Modalidad no valida.");
-            return;
+        while (modalidad != 1 && modalidad != 2) {
+            System.out.println("Opcion no valida. Selecciona 1 o 2.");
+            modalidad = leerEntero("Selecciona la modalidad: ");
         }
 
+        // En PvP se necesitan dos personas registradas.
         // Validar cantidad de jugadores para PvP
         if (modalidad == 1 && gestor.cantidadJugadores() < 2) {
             System.out.println("Se necesitan al menos 2 jugadores registrados.");
             return;
         }
 
-        // Seleccionar primer jugador
-        System.out.println("Selecciona el primer jugador.");
+        // Elegir quien sera el primer participante de esta partida.
+        // Seleccionar primer Jugador
+        System.out.println("Selecciona el primer Jugador.");
         gestor.mostrarJugadores();
 
-        int codigo1 = leerEntero("Codigo del jugador: ");
-        jugador jugador1 = gestor.buscar(codigo1);
+        int codigo1 = leerEntero("Codigo del Jugador: ");
+        Jugador jugador1 = gestor.buscar(codigo1);
 
         if (jugador1 == null) {
-            System.out.println("No existe un jugador con ese codigo.");
+            System.out.println("No existe un Jugador con ese codigo.");
             return;
         }
 
-        jugador jugador2 = null;
-        maquina computadora = null;
+        Jugador jugador2 = null;
+        Maquina computadora = null;
 
-        // Seleccionar segundo jugador o crear maquina
+        // En PvP se busca al segundo jugador; en PvC se creara la maquina mas adelante.
+        // Seleccionar segundo Jugador o crear Maquina
         if (modalidad == 1) {
 
-            System.out.println("Selecciona el segundo jugador.");
-            int codigo2 = leerEntero("Codigo del segundo jugador: ");
+            System.out.println("Selecciona el segundo Jugador.");
+            gestor.mostrarJugadores();
+            int codigo2 = leerEntero("Codigo del segundo Jugador: ");
 
             if (codigo1 == codigo2) {
-                System.out.println("No puedes seleccionar el mismo jugador dos veces.");
+                System.out.println("No puedes seleccionar el mismo Jugador dos veces.");
                 return;
             }
 
             jugador2 = gestor.buscar(codigo2);
 
             if (jugador2 == null) {
-                System.out.println("No existe un jugador con ese codigo.");
+                System.out.println("No existe un Jugador con ese codigo.");
                 return;
             }
         }
 
-        // Seleccionar ficha del primer jugador
+        // Solicita X u O y valida que se ingrese una sola ficha permitida.
+        // Seleccionar ficha del primer Jugador
         char ficha1 = ' ';
         char ficha2 = ' ';
         boolean valida = false;
@@ -225,6 +256,7 @@ public class inicio {
             }
         }
 
+        // El segundo participante recibe la ficha opuesta a la del primero.
         // Asignar ficha restante
         if (ficha1 == 'X') {
             ficha2 = 'O';
@@ -237,16 +269,17 @@ public class inicio {
         if (modalidad == 1) {
             jugador2.setFicha(ficha2);
         } else {
-            computadora = new maquina(0, "Computadora", ficha2);
+            computadora = new Maquina(0, "Computadora", ficha2);
         }
 
-        // Crear partida
-        partida nuevaPartida;
+        // Construye la partida con los dos participantes elegidos.
+        // Crear Partida
+        Partida nuevaPartida;
 
         if (modalidad == 1) {
-            nuevaPartida = new partida(modalidad, jugador1, jugador2);
+            nuevaPartida = new Partida(modalidad, jugador1, jugador2);
         } else {
-            nuevaPartida = new partida(modalidad, jugador1, computadora);
+            nuevaPartida = new Partida(modalidad, jugador1, computadora);
         }
 
         System.out.println("Partida creada correctamente.");
@@ -256,12 +289,13 @@ public class inicio {
         System.out.println("Comienza: " +
             nuevaPartida.getJugadorActual().getNombre());
 
+        // Repite turnos hasta que alguien gane o el tablero quede lleno.
         // Ciclo de juego
         while (!nuevaPartida.estaTerminada()) {
 
             nuevaPartida.mostrarTablero();
 
-            jugador actual = nuevaPartida.getJugadorActual();
+            Jugador actual = nuevaPartida.getJugadorActual();
 
             System.out.println("Turno de: " + actual.getNombre());
             System.out.println("Ficha: " + actual.getFicha());
@@ -270,7 +304,7 @@ public class inicio {
 
             if (modalidad == 2 && actual == computadora) {
 
-                System.out.println("La maquina esta pensando...");
+                System.out.println("La Maquina esta pensando...");
                 realizada = nuevaPartida.jugarMaquina();
 
             } else {
@@ -278,10 +312,12 @@ public class inicio {
                 int fila = leerEntero("Ingresa la fila (1-3): ");
                 int columna = leerEntero("Ingresa la columna (1-3): ");
 
-                realizada = nuevaPartida.realizarJugada(fila - 1, columna - 1);
-
-                if (!realizada) {
-                    System.out.println("Posicion invalida u ocupada. Intenta nuevamente.");
+                if (!nuevaPartida.posicionValida(fila - 1, columna - 1)) {
+                    System.out.println("Error: fila y columna deben estar entre 1 y 3.");
+                } else if (nuevaPartida.casillaOcupada(fila - 1, columna - 1)) {
+                    System.out.println("Error: esa casilla ya esta ocupada. Elige otra.");
+                } else {
+                    realizada = nuevaPartida.realizarJugada(fila - 1, columna - 1);
                 }
             }
 
@@ -294,12 +330,12 @@ public class inicio {
                 }
 
             } else if (modalidad == 2 && actual == computadora) {
-                System.out.println("La maquina no pudo realizar una jugada.");
+                System.out.println("La Maquina no pudo realizar una jugada.");
                 return;
             }
         }
 
-        // Mostrar resultado
+        // Mostrar el tablero final y comunicar si hubo ganador o empate.
         nuevaPartida.mostrarTablero();
 
         if (nuevaPartida.getGanador() != null) {
@@ -307,10 +343,11 @@ public class inicio {
             System.out.println("Ganador: " +
                 nuevaPartida.getGanador().getNombre());
         } else {
-            System.out.println("La partida termino en empate.");
+            System.out.println("La Partida termino en empate.");
         }
     }
 
+    // Muestra la clasificacion, comprobando primero si hay jugadores registrados.
     public void verReporte() {
         if (gestor.estaVacio()) {
             System.out.println("No hay jugadores para mostrar en el reporte.");
@@ -319,8 +356,9 @@ public class inicio {
         }
     }
 
+    // Punto de entrada del programa Java.
     public static void main(String[] args) {
-        inicio programa = new inicio();
+        Inicio programa = new Inicio();
         programa.ejecutarPrograma();
     }
 }
